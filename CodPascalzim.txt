@@ -1,5 +1,9 @@
-if else where while write then marcos
-Function
-23
-3
-4
+program 123NameFile; 
+var
+    n,k12 : integer; 
+begin
+    n := 12+1; 
+    k12 := 1; 
+    if((n <> 1) and (k > 1)) then 
+        print(n);
+end.
