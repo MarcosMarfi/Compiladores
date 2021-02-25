@@ -9,8 +9,8 @@
 
 #### Analisador Sintático
   
-  - [] Leitura de tokens
-  - [] Verificação de regras de sintáxi
+  - [ ] Leitura de tokens
+  - [ ] Verificação de regras de sintáxi
     
 #### Analisador Semântico
   
