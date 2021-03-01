@@ -7,7 +7,6 @@ TOKENS = ['div','or', 'and','not','if','then','else','of','while','do','begin','
 TYPE_VALUE = {
   'ID': {
     'regex': r'[a-zA-Z][a-zA-Z0-9]*',
-    # 'has_attribute': id_has_attribute
   },
   'NUM': {
     'regex': r'\d+(?:\d+)*(?:[Ee]?\d+)?',
@@ -80,8 +79,6 @@ RULES = {
   },  
   'COMMENT': {
     'regex': r'(\(\*(?:(?:[\n\t]|[ \S])(?!\/\*))*\*\))',
-    # 'ignore': True,
-    # 'newline': comment_newlines
   },
   'SINGLE_COMMENT': {
     'regex': r'{.*}',
@@ -97,19 +94,6 @@ RULES = {
     'regex': r'\r??\n',
   }
 }
-
-
-def isChar(char):
-  if(re.match("[a-zA-Z]", char) == None):
-    return False
-  else:
-    return True
-
-def isNumber(char):
-  if(re.search(r"\d+", char) == None):
-    return False
-  else:
-    return True
 
 def verifyRules(char):
   for sym in RULES.keys():
@@ -169,7 +153,6 @@ def createTable(lista):
   symb = ""
   aux = ""
   identifield = ""
-  valueAtrib = ""
   nextEl = ""
   numToken = 0
   table = {}
@@ -185,17 +168,21 @@ def createTable(lista):
 
       if(isSimbSpec(current) == False):    #concatena se não for simbolo especial
         identifield += current
-        if(verifyTypeId(identifield) != "ID"):  #retira qualquer parte numerica antes de identificaroes ou tokens
-          valueAtrib+=identifield
-          identifield=""
       elif(isSimbSpec(current)):    #verifica ocorrencia de simbolos
-        if(isTokenReserved(identifield) or verifyTypeId(identifield) == "ID"):  #adiciona tokens ou identificadores na tabela
+        if(verifyTypeId(identifield) == "ID"):    #adiciona tokens ou identificadores na tabela
           if(isTokenReserved(identifield)):     #se token reservado
             table[numToken] = { identifield.upper() : "" }
           else:                                                     #se identificador
             table[numToken] = { verifyTypeId(identifield) : identifield }
           identifield = ""
           numToken+=1
+        elif(identifield != ""):      #adiciona ocorrencias de numeros
+          if(identifield.isdigit()):
+            table[numToken] = { verifyTypeId(identifield): identifield }
+            identifield = ""
+            numToken+=1
+          else:
+            return 'Error, identificador invalido: ',str(identifield)
         if((verifyRules(current+nextEl) == "ASSIGN_OP") or (verifyRules(current+nextEl) == "GE") or (verifyRules(current+nextEl) == "NE") or (verifyRules(current+nextEl) == "LE")):
           symb = current+nextEl
           aux = nextEl
@@ -203,10 +190,6 @@ def createTable(lista):
           symb=""
           numToken+=1
         else:
-          if(verifyTypeId(valueAtrib) == "NUM"):      #adiciona ocorrencias de numeros
-            table[numToken] = { verifyTypeId(valueAtrib): valueAtrib }
-            valueAtrib = ""
-            numToken+=1
           if(verifyRules(current) != "SPACE" and current != aux):   #adiciona ocorrencia de simbolos
             aux = ""            
             symb = current
