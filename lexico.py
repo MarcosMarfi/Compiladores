@@ -1,6 +1,6 @@
 import re
 import time
-
+import Sintatico as sint
 TOKENS = ['div','or', 'and','not','if','then','else','of','while','do','begin','end','read','write','print',
   'var','array','function','procedure','program','true','false','char','integer','boolean', 'where']
 
@@ -199,6 +199,11 @@ def createTable(lista):
   return table
 
   
-file = read_file('CodPascalzim.txt', 'r')
+#file = read_file('CodPascalzim.txt', 'r')
+try: 
+  file = read_file('C:/Users/madln/Documents/Universidade 2020-2021/2021/COMPILADORES/Compiladores/CodPascalzim.txt', 'r')
 
-print(createTable(showFileLines(file)))
+  print(createTable(showFileLines(file)))
+  sint.sintatico(createTable(showFileLines(file)))
+except:
+    print("")
