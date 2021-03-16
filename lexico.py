@@ -1,6 +1,12 @@
 import re
 import time
 import Sintatico as sint
+from analisadorSintatico import Sintatico as parser
+from token import Token as tk
+
+from compiladorExceptions.identifierException import IdentifierException
+from compiladorExceptions.programException import ProgramException
+
 TOKENS = ['div','or', 'and','not','if','then','else','of','while','do','begin','end','read','write','print',
   'var','array','function','procedure','program','true','false','char','integer','boolean', 'where']
 
@@ -148,7 +154,8 @@ def verifyToken(arr, listToken):
       tokensResevados.append(verifyLine([l], listToken))
   return tokensResevados
 
-def createTable(lista):
+def scanner(lista):
+  newToken = object
   current = ""
   symb = ""
   aux = ""
@@ -168,25 +175,38 @@ def createTable(lista):
 
       if(isSimbSpec(current) == False):    #concatena se não for simbolo especial
         identifield += current
-      elif(isSimbSpec(current)):    #verifica ocorrencia de simbolos
+      else:    #verifica ocorrencia de simbolos
         if(verifyTypeId(identifield) == "ID"):    #adiciona tokens ou identificadores na tabela
           if(isTokenReserved(identifield)):     #se token reservado
             table[numToken] = { identifield.upper() : "" }
+            newToken = tk(identifield.upper(), "RESERVED")   
+            parser(newToken)
+            newToken = object
           else:                                                     #se identificador
             table[numToken] = { verifyTypeId(identifield) : identifield }
+            newToken = tk(identifield.upper(), "ID")
+            parser(newToken)
+            newToken = object
           identifield = ""
           numToken+=1
         elif(identifield != ""):      #adiciona ocorrencias de numeros
           if(identifield.isdigit()):
             table[numToken] = { verifyTypeId(identifield): identifield }
+            newToken = tk(identifield.upper(), "NUM")
+            parser(newToken)
+            newToken = object
             identifield = ""
             numToken+=1
           else:
-            return 'Error, identificador invalido: ',str(identifield)
+            raise IdentifierException            
+            break
         if((verifyRules(current+nextEl) == "ASSIGN_OP") or (verifyRules(current+nextEl) == "GE") or (verifyRules(current+nextEl) == "NE") or (verifyRules(current+nextEl) == "LE")):
           symb = current+nextEl
           aux = nextEl
           table[numToken] = {verifyRules(symb) : symb}    #adiciona simbolos com ocorrencias duplas
+          newToken = tk(verifyRules(symb), "SYMB")
+          parser(newToken)
+          newToken = object
           symb=""
           numToken+=1
         else:
@@ -194,16 +214,21 @@ def createTable(lista):
             aux = ""            
             symb = current
             table[numToken] = {verifyRules(symb) : symb}
+            newToken = tk(verifyRules(symb), "SYMB")
+            parser(newToken)
+            newToken = object
             symb=""
             numToken+=1
-  return table
+  return ""
 
   
-#file = read_file('CodPascalzim.txt', 'r')
 try: 
-  file = read_file('C:/Users/madln/Documents/Universidade 2020-2021/2021/COMPILADORES/Compiladores/CodPascalzim.txt', 'r')
+  file = read_file('CodPascalzim.txt', 'r')
+  # file = read_file('C:/Users/madln/Documents/Universidade 2020-2021/2021/COMPILADORES/Compiladores/CodPascalzim.txt', 'r')
 
-  print(createTable(showFileLines(file)))
-  sint.sintatico(createTable(showFileLines(file)))
-except:
-    print("")
+  scanner(showFileLines(file))
+  # sint.sintatico(scanner(showFileLines(file)))
+except IdentifierException:
+  print('Error Lexíco, identificador invalido!')
+except Exception:
+  None

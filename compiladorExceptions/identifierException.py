@@ -1,0 +1,2 @@
+class IdentifierException(Exception):
+    pass
