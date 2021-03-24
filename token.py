@@ -1,7 +1,8 @@
 class Token:
-    def __init__(self, tk_name, tk_type):
+    def __init__(self, tk_name, tk_type, line):
         self.token = tk_name
         self.type = tk_type
+        self.line = line
     
     def getTkName(self):
         return self.token
@@ -14,6 +15,9 @@ class Token:
     
     def setTkType(self, tk_type):
         self.type = tk_type
-
+    
+    def getTkLine(self):
+        return self.line
+    
     def toString():
         return "Token Name: "+self.token.getTkName()+" Token Type: "+self.token.getTkType()

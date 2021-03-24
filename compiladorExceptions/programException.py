@@ -1,2 +1,0 @@
-class ProgramException(Exception):
-    pass
