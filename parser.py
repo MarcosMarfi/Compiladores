@@ -5,7 +5,9 @@ from compiladorExceptions.operatorException import OperatorException
 class Sintatico:
     currentToken = ""
 
-    VARS = {}
+    tree = []
+
+    tableVar = {}
 
     currentScope = 0
 
@@ -14,23 +16,27 @@ class Sintatico:
         
         self.currentToken = self.lexer.nextToken()
 
-        while True:
+        while (self.lexer.endCode() == False):
             if('ignore' in self.lexer.rules[self.currentToken.getTkType()]):
                 self.currentToken = self.lexer.nextToken()
             else:
                 break
 
         self.program()
-        print("Execute with Success!")        
-        # print(self.VARS)
+        print("Execute with Success!")
 
     # consumes token if is valid
     def expectedToken(self, tk):
+        rules = self.lexer.rules
         if self.consumesToken(tk):
+            # self.tree.append(tk)
             return True
         else:
-            raise ParserException(" Expected "+tk+" but found is '"+self.currentToken.getTkName()+"'", str(self.currentToken.getTkLine()))
-            return False
+            if(tk == "SEMICOLON"):
+                raise ParserException(" Expected '"+rules[tk]['regex']+"'", str(self.currentToken.getTkLine()-1))
+            else:
+                raise ParserException("Not Expected '"+self.currentToken.getTkName()+"'", str(self.currentToken.getTkLine()))
+                return False
 
     # compare if token is valid
     def compare(self, tk, currentToken):
@@ -60,6 +66,7 @@ class Sintatico:
                 self.currentToken = self.lexer.nextToken()
                 while 'ignore' in rules[self.currentToken.getTkType()] and rules[self.currentToken.getTkType()]['ignore'] == True:
                     self.currentToken = self.lexer.nextToken()
+                # self.tree.append(self.currentToken.getTkName())
                 return True
             else:
                 return True
@@ -67,14 +74,14 @@ class Sintatico:
 
     # add variables in cache
     def addVar(self, v):
-        # if v['id'] in self.VARS:
-        #     raise BlockVarException("Variable '"+v['id']+"' already declared", str(self.currentToken.getTkLine()))
-        #     return False
-        self.VARS[v['id']] = v
+        if v['id'] in self.tableVar and v['scope'] in self.tableVar:
+            # raise BlockVarException("Variable '"+v['id']+"' already declared", str(self.currentToken.getTkLine()))
+            return False
+        self.tableVar[v['id']] = v
 
     # search for declarations of varables
     def searchVar(self, v):
-        for id, data in self.VARS.items():
+        for id, data in self.tableVar.items():
             if data['id'] == v:
                 return data
         return None
@@ -97,7 +104,7 @@ class Sintatico:
         elif self.consumesToken("BOOLEAN"):
             pass
         else:
-            raise BlockVarException("Type of variable "+self.currentToken.getTkName()+" is not recognized", str(self.currentToken.getTkLine()))
+            raise BlockVarException("Type of variable is not recognized", str(self.currentToken.getTkLine()))
 
     # consumes token types CONSTANT
     def constant(self):
@@ -161,7 +168,7 @@ class Sintatico:
         elif self.checkHead("ARRAY"):
             self.typeVarArray()
         else:
-            raise BlockVarException("Type of variable "+self.currentToken.getTkName()+" is not recognized", str(self.currentToken.getTkLine()))
+            raise BlockVarException("Type of variable is not recognized", str(self.currentToken.getTkLine()))
 
     # program
     def program(self):
@@ -186,7 +193,7 @@ class Sintatico:
                 while self.checkHead("IDENTIFIER"):  # deve gerar erro se nao achar identifier
                     self.variableDeclaration(self.currentScope)
                     self.expectedToken("SEMICOLON")
-                self.currentScope+=1
+                # self.currentScope+=1
             else:
                 pass
                 # raise ParserException("Error IDENTIFIER expected",str(currentToken.getTkLine()))        
@@ -274,11 +281,26 @@ class Sintatico:
         while self.consumesToken("FUNCTION"):
             if self.checkHead("IDENTIFIER"):
                 self.expectedToken("IDENTIFIER")
-                self.expression()
+                self.expectedToken("LP")
+                self.functionParam()
+                self.expectedToken("RP")
+                self.expectedToken("COLON")
+                self.consumesTypeVars()
                 self.expectedToken("SEMICOLON")
                 self.block()
             else:
                 raise ParserException("Expected IDENTIFIER",str(self.currentToken.getTkLine()))  
+        else:
+            pass
+
+    # consumes parameters passed in the function
+    def functionParam(self):
+        if self.checkHead("IDENTIFIER"):
+            self.variableDeclaration(self.currentScope)
+            while self.consumesToken("SEMICOLON"):
+                self.variableDeclaration(self.currentScope)
+            else:
+                pass
         else:
             pass
 
@@ -293,6 +315,7 @@ class Sintatico:
         while self.checkHead("SEMICOLON"):
             self.expectedToken("SEMICOLON")
             self.statement()
+        self.currentScope+=1
         self.expectedToken("END")
         
     # check statement block
