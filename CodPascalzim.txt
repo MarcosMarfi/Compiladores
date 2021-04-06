@@ -1,34 +1,49 @@
 program NameFile;
 procedure teste;
-var i,n: integer;
+var 
+    i: array[0..4] of boolean;
+    l,j: integer;
 begin
-    print('ola');
+    print(l div j)
 end
-procedure teste2;
+procedure teste1;
 begin
     write("adsfds");
 end
-function name(asd);
+function name(ab:integer; a: array[0..2] of boolean;b:char): integer;
+var l: integer;
 begin
-    write("asdfads");
+    write('sad');
+    name:= l+ab;
 end
 procedure teste3;
 begin
-    write("adsfds");
+    write('n');
+end
+function name2(): boolean;
+begin
+    write("asdfads");
 end
 var
-    n,k12:integer;
-    l,k,i:boolean;
+    k12,i,n:integer; 
+    l,k:integer; 
     a: array[1..12] of integer;
+    te: char;
 begin
-    n := 2-10 div 3;
+    n := (2-10 div 3 *2);
     k12 := 1;
     read(n);
     write('ola mundo');
+    teste;
     if ((n > k12) and (k12 <> 10)) then
-        while (a>2) do
+        while (i>2) do
         begin
-            if 2=2 then
-                print("hello world");
+            te:= 'const';
+            if (2=2) then
+                print("hello world")
         end
+    else if 3>4 then
+        write('mostra isso')
+    else
+        write('mostra isso')
 end.

@@ -1,5 +1,5 @@
 from lexer import Lexico
-from parser import Sintatico
+from Sintatico import Sintatico
 
 from compiladorExceptions.parserException import ParserException
 from compiladorExceptions.blockVarException import BlockVarException
@@ -99,30 +99,44 @@ TOKENS_RESERVED = ['AND','ARRAY','BEGIN','BOOLEAN','CHAR','DIV','DO','ELSE','END
     'OR','PROCEDURE','PROGRAM','READ','THEN','TRUE','VAR','WHILE','WRITE','PRINT'
 ]
 
-TYPE_VALUE = {
-  'ID': {
-    'regex': r'[a-zA-Z][a-zA-Z0-9]*',
-  },
-  'NUM': {
-    'regex': r'\d+(?:\d+)*(?:[Ee]?\d+)?',
-  },
-}
+while True:
+    print("1-Lexico")
+    print("2-Sintatico")
+    print("3-Semantico")
+    print("0-Sair")
 
-code = ''
-with open('CodPascalzim.txt', 'r') as myfile:
-    code = myfile.read()
+    op = input("DIGITE UMA OPÇÂO: ")
+    try:
+        code = ''
+        with open('CodPascalzim.txt', 'r') as myfile:
+            code = myfile.read()
 
-try:
-    le = Lexico(code, RULES, TOKENS_RESERVED)
-    Sintatico(le)
-except ParserException as e:
-    print(e.getError())
-except BlockVarException as e:
-    print(e.getError())
-except OperatorException as e:
-    print(e.getError())
-# while True:
-#     if le.endCode():
-#         break
-#     else:
-#         print(le.nextToken().getTkName())
+        if op == '0':
+            break
+        elif op == '1':                    
+            outro = Lexico(code, RULES, TOKENS_RESERVED)
+            table = []
+            while True:
+                if outro.endCode():
+                    break
+                else:
+                    table.append(outro.nextToken().getTkName())
+            print(table)        
+        elif op == '2':
+            try:
+                Sintatico(Lexico(code, RULES, TOKENS_RESERVED))
+            except ParserException as e:
+                print(e.getError())
+            except BlockVarException as e:
+                print(e.getError())
+            except OperatorException as e:
+                print(e.getError())
+            except Exception as e:
+                print(e)
+        else:
+            print("SEMANTICO")
+    except Exception as e:
+        print(e)
+        continue
+    finally:
+        Sintatico.tableVar = []

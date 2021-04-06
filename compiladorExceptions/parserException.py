@@ -4,4 +4,4 @@ class ParserException(Exception):
         self.line = line
 
     def getError(self):
-        return "error: { Message: "+self.message+", Linha: "+self.line+" }"
+        return "error Sintatico: { Message: "+self.message+", Linha: "+self.line+" }"

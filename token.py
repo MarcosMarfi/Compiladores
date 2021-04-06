@@ -19,5 +19,5 @@ class Token:
     def getTkLine(self):
         return self.line
     
-    def toString():
-        return "Token Name: "+self.token.getTkName()+" Token Type: "+self.token.getTkType()
+    def toString(self):
+        return (self.getTkType(), self.getTkName())

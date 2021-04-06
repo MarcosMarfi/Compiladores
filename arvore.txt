@@ -1,0 +1,9 @@
+{
+    'program': {id, ;, block},
+    'block': {begin,[function:{}, procedure:{}], [var:{}, statement:{}], .},
+    'procedure': {[procedure:{},function:{},var:{}],begin,end},
+    'function': {[procedure:{},function:{},var:{}],begin,end},
+    'var': {declaração de variaveis do escopo global},
+    'statement': {compoundBlock:{}},
+    'compoundBlock': {[procedureId, functionId],[assignmentStatement:{},write,read,print], [if, while], end}
+}
