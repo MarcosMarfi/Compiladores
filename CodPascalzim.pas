@@ -10,35 +10,29 @@ procedure teste1;
 begin
     write("adsfds");
 end
-function name(ab:integer; a: array[0..2] of boolean;b:char): integer;
-var l: integer;
-begin
-    write('sad');
-    name:= l+ab;
-end
 procedure teste3;
 begin
     write('n');
 end
-function name2(): boolean;
+
+function name2(a:integer): boolean;
 begin
     write("asdfads");
 end
+
 var
     k12,i,n:integer; 
-    l,k:integer; 
-    a: array[1..12] of integer;
-    te: char;
+    l,k,j:integer; 
 begin
     n := (2-10 div 3 *2);
-    k12 := 1;
-    read(n);
+    k12 := 12;
+    read;
+    read();
     write('ola mundo');
     teste;
     if ((n > k12) and (k12 <> 10)) then
         while (i>2) do
         begin
-            te:= 'const';
             if (2=2) then
                 print("hello world")
         end

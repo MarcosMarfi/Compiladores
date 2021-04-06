@@ -99,44 +99,59 @@ TOKENS_RESERVED = ['AND','ARRAY','BEGIN','BOOLEAN','CHAR','DIV','DO','ELSE','END
     'OR','PROCEDURE','PROGRAM','READ','THEN','TRUE','VAR','WHILE','WRITE','PRINT'
 ]
 
-while True:
-    print("1-Lexico")
-    print("2-Sintatico")
-    print("3-Semantico")
-    print("0-Sair")
+def Main():
+    code = ''
 
-    op = input("DIGITE UMA OPÇÂO: ")
-    try:
-        code = ''
-        with open('CodPascalzim.txt', 'r') as myfile:
-            code = myfile.read()
+    while True:
+        print("1-Lexico")
+        print("2-Sintatico")
+        print("3-Ler o Codigo")
+        print("0-Sair")
 
-        if op == '0':
-            break
-        elif op == '1':                    
-            outro = Lexico(code, RULES, TOKENS_RESERVED)
-            table = []
-            while True:
-                if outro.endCode():
-                    break
-                else:
-                    table.append(outro.nextToken().getTkName())
-            print(table)        
-        elif op == '2':
-            try:
-                Sintatico(Lexico(code, RULES, TOKENS_RESERVED))
-            except ParserException as e:
-                print(e.getError())
-            except BlockVarException as e:
-                print(e.getError())
-            except OperatorException as e:
-                print(e.getError())
-            except Exception as e:
-                print(e)
-        else:
-            print("SEMANTICO")
-    except Exception as e:
-        print(e)
-        continue
-    finally:
-        Sintatico.tableVar = []
+        op = input("DIGITE UMA OPÇÂO: ")
+        try:            
+            if op == '0':
+                break
+            elif op == '1':                    
+                newLexer = Lexico(code, RULES, TOKENS_RESERVED)
+                while True:
+                    if newLexer.endCode():
+                        break
+                    else:
+                        print(newLexer.nextToken().toString())       
+            elif op == '2':            
+                try:
+                    if code == '':
+                        print('Realize a leitura do arquivo!')
+                    else:
+                        newLexer = Lexico(code, RULES, TOKENS_RESERVED) 
+                        newSintatic = Sintatico(newLexer)
+                except ParserException as e:
+                    print(e.getError())
+                except BlockVarException as e:
+                    print(e.getError())
+                except OperatorException as e:
+                    print(e.getError())
+                except Exception as e:
+                    print(e)
+            elif op == '3':
+                with open('CodPascalzim.pas', 'r') as myfile:
+                    code = myfile.read()
+                print('Leitura Realizada!')
+            else:
+                print("Digite uma opção valida!")
+        except Exception as e:
+            print(e)
+            continue
+        finally:
+            Sintatico.currentToken = ""
+            Sintatico.branchTree = {
+                'PROGRAM': {},
+                'BLOCK': {},
+                'FUNCTION':{},
+                'PROCEDURE': {},
+                'VAR': {},
+                'STATEMENT': {},
+            }
+
+Main()

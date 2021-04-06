@@ -1,7 +1,6 @@
 class Semantico:
 
-    # def __init__(self):
-
+    # check if token is declared in scope
     def checkToken(self, dic, token):
         if dic:
             for c,v in dic.items():

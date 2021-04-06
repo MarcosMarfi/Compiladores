@@ -253,34 +253,19 @@ class Sintatico:
    
     # valid declaration of the variables
     def variableDeclaration(self):
-        # adiciona variavel na tabela
-        # print(self.currentToken.getTkLine(),self.currentToken.toString(), self.currentScope)
+        # adiciona variavel na tabela       
         self.createBranchTree(self.currentToken, 'VAR')
 
-        # declarations.append(self.currentToken.getTkName())
         # consumes declaration of the variable
         self.expectedToken("IDENTIFIER")
         while self.consumesToken("COMMA"): # if COMMA found            
             # declarations.append(self.currentToken.getTkName())
-            # print(self.currentToken.getTkLine(),self.currentToken.toString())
             self.createBranchTree(self.currentToken, 'VAR')
             # consumes declaration of the variable
             self.expectedToken("IDENTIFIER")
 
         # consumes COLON
-        self.expectedToken("COLON")
-        # for var in declarations:
-        #     if self.currentToken.getTkName().lower() == 'INTEGER'.lower():
-        #         self.searchVar(var)['type'] = 'integer'
-        #     elif self.currentToken.getTkName().lower() == 'BOOLEAN'.lower():
-        #         self.searchVar(var)['type'] = 'boolean'
-        #     elif self.currentToken.getTkName().lower() == 'CHAR'.lower():
-        #         self.searchVar(var)['type'] = 'char'
-        #     elif self.currentToken.getTkName().lower() == 'ARRAY'.lower():
-        #         self.searchVar(var)['type'] = 'array'
-        #     else:
-        #         raise BlockVarException("Type of variable "+self.currentToken.getTkName()+" is not recognized", str(self.currentToken.getTkLine()))
-        
+        self.expectedToken("COLON")                
         #consumes token that representation type of the variables
         self.consumesTypeVars()
     
@@ -426,11 +411,7 @@ class Sintatico:
             else:
                 self.Semantic.checkVariableDeclaredID(self.branchTree, self.currentToken, self.currentScope)
         else:
-            # raise ParserException("")
-            pass
-            # raise Exception("Error")
-        # print("simple structure", self.currentToken.getTkName(), self.currentToken.getTkLine())
-        # return
+            pass            
     
     # an block structure [BEGIN, IF OR WHILE]
     def structuredStatement(self):     
@@ -452,15 +433,15 @@ class Sintatico:
         # check token READ
         self.expectedToken("READ")
         # check token LP '('
-        self.expectedToken("LP")
+        # self.expectedToken("LP")
         # check IDENTIFIER type variable
-        self.expectedToken("IDENTIFIER")
+        self.expression()
         while self.checkHead("COMMA"):  # check MULTIPLE OCURRENCES            
             self.expectedToken("COMMA")
             # check IDENTIFIER type variable
-            self.expectedToken("IDENTIFIER")
+            self.expression()
         # check finally the block with token RP ')'
-        self.expectedToken("RP")
+        # self.expectedToken("RP")
 
     # rule of statement WRITE
     def writeStatement(self):
@@ -572,8 +553,9 @@ class Sintatico:
         elif self.checkHead("NOT"):
             self.expectedToken("NOT")
         else:
-            raise ParserException("Expected IDENTIFIER, NUM, LP or NOT, but found '"+self.currentToken.getTkName()+"'",
-             str(self.currentToken.getTkLine()))
+            pass
+            # raise ParserException("Expected IDENTIFIER, NUM, LP or NOT, but found '"+self.currentToken.getTkName()+"'",
+            #  str(self.currentToken.getTkLine()))
 
         return type
 
