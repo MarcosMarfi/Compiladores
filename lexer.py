@@ -1,6 +1,6 @@
 import re
 
-from token import Token
+from tk import Token
 
 class Lexico:
     index = 0

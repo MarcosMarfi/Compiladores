@@ -27,7 +27,7 @@ begin
     n := (2-10 div 3 *2);
     k12 := 12;
     read;
-    read();
+    read(k12);
     write('ola mundo');
     teste;
     if ((n > k12) and (k12 <> 10)) then

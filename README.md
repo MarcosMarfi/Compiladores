@@ -9,12 +9,12 @@
 
 #### Analisador Sintático
   
-  - [ ] Leitura de tokens
-  - [ ] Verificação de regras de sintáxi
+  - [X] Leitura de tokens
+  - [X] Verificação de regras de sintáxi
     
 #### Analisador Semântico
   
-   - [X] Nada feito.
+   - [X] Feito.
     
 ## Analisador Léxico
   tokens
@@ -27,7 +27,7 @@
       RULES = {  'TIMES': { 'regex': '\*' }, 'MINUS': {'regex': '-'},'PLUS': {'regex': '\+'},'ASSIGN_OP': {'regex': r':='},'GE': {'regex': '>='},'RP': {'regex': '\)'},'GT': {'regex': '>'},'LE': {'regex': '<='},'LP': {'regex': '\('},'DOTDOT': {'regex': '\.\.'},'NE': {'regex': '<>'},'LT': {'regex': '<'},'SEMICOLON': {'regex': ';'},'COMMA': {'regex': ','},'COLON': {'regex': ':'},'DOT': {'regex': '\.'},'LB': {'regex': '\['},'RB': {'regex': '\]'},'EQUAL': {'regex': r'='},'SINGLE_QUOTE': {'regex': r'\''},"DOUBLE_QUOTE": {'regex': r'\"'},'COMMENT': {'regex': r'(\(\*(?:(?:[\n\t]|[ \S])(?!\/\*))*\*\))',},'SINGLE_COMMENT': {'regex': r'{.*}',},'SPACE': {'regex': r'[ ]',},'TAB': {'regex': r'\t',},'NEW_LINE': {'regex': r'\r??\n',}}
       
 # Status
-    Desenvolvimento...
+    Concluido!
     
 # Download
   ###### Repositorio github 
@@ -37,7 +37,17 @@
     
 # Rodar
   ###### Execute
-    python3 lexico.py
+
+    Para executar basta dar dois click´s no arquivo alfos.exe, o mesmo ira mostrar um menu.
+      
+      Menu 
+        op 1 - Mostra os Tokens Lidos no Léxico
+        op 2 - Executa a validação de regras Sintática
+        op 3 - Realiza a leitura do Arquivo CodPascalzim.pas
+        op 0 - Sair
+      
+    para cada execução deve-se realizar a leitura do arquivo, quando houver alguma modificação
+    no arquivo CodPascalzim.pas, salvar o arquivo e em seguida realizar novamente a leitura.
   ###### OR
     python lexico.py
   
